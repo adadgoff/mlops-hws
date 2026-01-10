@@ -208,7 +208,7 @@ run: contacts check-deps check-ip
 
 	@echo "MLOps система успешно запустилась."
 	
-	@make urls
+	@make urls --no-print-directory
 
 	@minikube service frontend --namespace=mlops > /dev/null 2>&1
 

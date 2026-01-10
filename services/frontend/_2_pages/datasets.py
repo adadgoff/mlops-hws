@@ -55,18 +55,18 @@ if __name__ == "__main__":
     ):
         upload_dataset_modal()
 
-    if control_buttons.button(
-        label="Скачать датасет",
-        icon=":material/download:",
-        width="stretch",
-        help=(
-            "Нет загруженных датасетов."  # noqa.
-            if len(datasets) == 0
-            else None
-        ),
-        disabled=len(datasets) == 0,
-    ):
-        download_dataset_modal()
+    # if control_buttons.button(
+    #     label="Скачать датасет",
+    #     icon=":material/download:",
+    #     width="stretch",
+    #     help=(
+    #         "Нет загруженных датасетов."  # noqa.
+    #         if len(datasets) == 0
+    #         else None
+    #     ),
+    #     disabled=len(datasets) == 0,
+    # ):
+    #     download_dataset_modal()
 
     if control_buttons.button(
         label="Удалить датасет",

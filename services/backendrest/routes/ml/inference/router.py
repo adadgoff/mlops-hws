@@ -4,17 +4,12 @@ from threading import Timer
 
 import pandas as pd
 
-from clearml import (
-    Task,
-    TaskTypes,
-)
 from fastapi import (
     APIRouter,
     HTTPException,
     status,
 )
 
-from core.clearml import CLEARML_PROJECT_NAME
 from core.datasets.consts import (
     DATASET_ALLOWED_EXTENSION,
     DATASET_TARGET_COLUMN,
@@ -96,14 +91,6 @@ async def get_inference(
                     + f"в датасете {dataset_name} для инференса."
                 ),
             )
-        task = Task.init(
-            project_name=CLEARML_PROJECT_NAME,
-            task_name=f"inference-{ml_model_name}-{dataset_name}",
-            task_type=TaskTypes.inference,
-        )
-        task.connect(
-            created_ml_model.ml_model.get_params(),
-        )
         df["Predictions"] = created_ml_model.ml_model.predict(
             df,
         )

@@ -93,7 +93,7 @@ if __name__ == "__main__":
             st.toast(
                 body=f"""
                     Инференс сохранен в файл {response}.
-                    Скачайте его и посмотрите результаты.
+                    Скачайте его через MinIO и посмотрите результаты.
                 """,
                 icon=":material/check:",
                 duration="long",
