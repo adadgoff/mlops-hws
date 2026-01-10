@@ -1,0 +1,11 @@
+[client]
+toolbarMode = "minimal"
+
+[runner]
+magicEnabled = false
+
+[server]
+maxUploadSize = 4_000
+
+[ui]
+hideTopBar = true

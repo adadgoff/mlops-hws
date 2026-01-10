@@ -1,0 +1,46 @@
+---
+# bucketsinitializer-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bucketsinitializer-config
+  namespace: mlops
+data:
+  MINIO_CONSOLE: "minio:9000"
+---
+# bucketsinitializer-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bucketsinitializer-secret
+  namespace: mlops
+type: Opaque
+stringData:
+  MINIO_ACCESS_KEY: "minio"
+  MINIO_SECRET_KEY: "minio123"
+---
+# bucketsinitializer-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bucketsinitializer
+  namespace: mlops
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    spec:
+      containers:
+      - name: bucketsinitializer
+        image: "bucketsinitializer:latest"
+        imagePullPolicy: IfNotPresent
+        command: [
+          "uv",
+          "run",
+          "main.py",
+        ]
+        envFrom:
+          - configMapRef:
+              name: bucketsinitializer-config
+          - secretRef:
+              name: bucketsinitializer-secret
+      restartPolicy: OnFailure

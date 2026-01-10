@@ -1,0 +1,139 @@
+{
+  "lists": [
+    {
+      "id": "33e1d93b-df27-4231-b224-1c00d9fa22a9",
+      "title": "Backlog",
+      "cards": [
+        {
+          "id": "814310b6-3ab8-4b4d-bb34-2aaa89570337",
+          "listId": "33e1d93b-df27-4231-b224-1c00d9fa22a9",
+          "title": "FRONTEND-2 | На корневой странице при создании ML модели при пустых параметрах возникает ошибка.",
+          "description": "",
+          "labels": [
+            {
+              "id": "5aa25bb7-9313-43d8-8b18-b0618686f21b",
+              "title": "Bug",
+              "color": "#eb5a46"
+            },
+            {
+              "id": "47c13921-ae1d-4727-aa81-9c5cba30db8e",
+              "title": "Normal",
+              "color": "#ff9f1a"
+            }
+          ],
+          "checkboxes": [],
+          "comments": []
+        },
+        {
+          "id": "46f5d333-7c35-42e8-88b9-aeb00638bc86",
+          "listId": "33e1d93b-df27-4231-b224-1c00d9fa22a9",
+          "title": "FRONTEND-1 | Добавить описания и проверки к формам при создании ML модели и Датасеты.",
+          "description": "",
+          "labels": [
+            {
+              "id": "4c98db55-2518-417a-a79f-7ddef58bcf94",
+              "title": "Low",
+              "color": "#61bd4f"
+            }
+          ],
+          "checkboxes": [],
+          "comments": []
+        },
+        {
+          "id": "88e4436c-b48e-44d8-b7b5-bfc86d432502",
+          "listId": "33e1d93b-df27-4231-b224-1c00d9fa22a9",
+          "title": "BACKENDREST-3 | Добавить label к созданным в ClearML credentials.",
+          "description": "http://192.168.200.200:30020/api/v2.31/auth.edit_credentials\n",
+          "labels": [
+            {
+              "id": "4c98db55-2518-417a-a79f-7ddef58bcf94",
+              "title": "Low",
+              "color": "#61bd4f"
+            }
+          ],
+          "checkboxes": [],
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": "1e6ccfd9-0005-4f00-93b8-9839943fae64",
+      "title": "To Do",
+      "cards": [
+        {
+          "id": "f7b04e1a-43f0-4de4-a449-da123925832f",
+          "listId": "1e6ccfd9-0005-4f00-93b8-9839943fae64",
+          "title": "BACKENDREST-2 | При добавлении датасет обязательно должна быть колонка target.",
+          "description": "",
+          "labels": [
+            {
+              "id": "b5826be2-d077-4125-b3c2-4d20397a7320",
+              "title": "High",
+              "color": "#eb5a46"
+            }
+          ],
+          "checkboxes": [],
+          "comments": []
+        },
+        {
+          "id": "034e3b29-f77e-47e6-9271-e751781b51a8",
+          "listId": "1e6ccfd9-0005-4f00-93b8-9839943fae64",
+          "title": "BACKENDREST-1 | При перезапуске сервера надо проверять есть ли уже ClearML credentials и использовать существующие.",
+          "description": "http://192.168.200.200:30020/api/v2.31/auth.get_credentials",
+          "labels": [
+            {
+              "id": "47c13921-ae1d-4727-aa81-9c5cba30db8e",
+              "title": "Normal",
+              "color": "#ff9f1a"
+            }
+          ],
+          "checkboxes": [],
+          "comments": []
+        }
+      ]
+    },
+    {
+      "id": "ce7d628c-44f6-4e4f-b8bb-536d5a835272",
+      "title": "Doing",
+      "cards": []
+    },
+    {
+      "id": "bfc70726-a5c1-4ba0-a7f4-a2e3a8f69201",
+      "title": "Done",
+      "cards": []
+    }
+  ],
+  "archive": {
+    "lists": [
+      {
+        "id": "b6cfc230-ecb4-4ed8-8538-3c40f632b47a",
+        "title": "Bugs"
+      }
+    ],
+    "cards": []
+  },
+  "settings": {
+    "labels": [
+      {
+        "id": "4c98db55-2518-417a-a79f-7ddef58bcf94",
+        "title": "Low",
+        "color": "#61bd4f"
+      },
+      {
+        "id": "47c13921-ae1d-4727-aa81-9c5cba30db8e",
+        "title": "Normal",
+        "color": "#ff9f1a"
+      },
+      {
+        "id": "5aa25bb7-9313-43d8-8b18-b0618686f21b",
+        "title": "Bug",
+        "color": "#eb5a46"
+      },
+      {
+        "id": "b5826be2-d077-4125-b3c2-4d20397a7320",
+        "title": "High",
+        "color": "#eb5a46"
+      }
+    ]
+  }
+}

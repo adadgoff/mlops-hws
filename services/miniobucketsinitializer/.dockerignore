@@ -1,0 +1,7 @@
+# Docker.
+Dockerfile
+.dockerignore
+
+# Python.
+.venv
+__pycache__

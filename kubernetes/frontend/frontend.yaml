@@ -1,0 +1,104 @@
+---
+# frontend-service-account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend
+  namespace: mlops
+---
+# frontend-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: mlops
+data:
+  BACKEND_ADDRESS: "http://backendrest:8000"
+---
+# frontend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: mlops
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: frontend
+    app.kubernetes.io/version: "1.0"
+spec:
+  type: NodePort
+  ports:
+    - port: 8501
+      targetPort: 8501
+      nodePort: 30000
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: frontend
+---
+# frontend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: mlops
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: frontend
+    app.kubernetes.io/version: "1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+      app.kubernetes.io/instance: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frontend
+        app.kubernetes.io/instance: frontend
+    spec:
+      serviceAccountName: frontend
+      securityContext: {}
+      containers:
+        - name: frontend
+          image: "frontend:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8501
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: frontend-config
+          args:
+            - uv
+            - run
+            - streamlit
+            - run
+            - _1_app.py
+            # - --server.port=8501
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 8501
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+            httpGet:
+              path: /
+              port: 8501
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext: {}

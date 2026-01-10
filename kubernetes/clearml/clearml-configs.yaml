@@ -1,0 +1,55 @@
+---
+# clearml-apiserver-conf-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: clearml-apiserver-conf-secret
+  namespace: mlops
+type: Opaque
+stringData:
+  apiserver.conf: |
+    auth {
+        # Fixed users login credentials
+        # No other user will be able to login
+        fixed_users {
+            enabled: true
+            pass_hashed: false
+            users: [
+                {
+                    username: "clearml"
+                    password: "clearml123"
+                    name: "ClearML user"
+                },
+            ]
+        }
+    }
+---
+# clearml-clearml-conf-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: clearml-clearml-conf-secret
+  namespace: mlops
+type: Opaque
+stringData:
+  clearml.conf: |
+    sdk {
+      aws {
+        s3 {
+          key: "minio"
+          secret: "minio123"
+          
+          credentials: [
+            {
+              bucket: "clearml"
+              host: "minio:9000"
+              key: "minio"
+              secret: "minio123"
+              multipart: false
+              secure: false
+              verify: false
+            }
+          ]
+        } 
+      }
+    }

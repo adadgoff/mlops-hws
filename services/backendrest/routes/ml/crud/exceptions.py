@@ -1,0 +1,2 @@
+class UnknownMLModelException(Exception):
+    pass

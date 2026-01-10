@@ -1,0 +1,69 @@
+---
+# Source: aistor-objectstore/templates/object-store-configuration.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-env-configuration
+  namespace: "mlops"
+type: Opaque
+stringData:
+  config.env: |-
+    export MINIO_ROOT_USER="minio"
+    export MINIO_ROOT_PASSWORD="minio123"
+---
+# Source: aistor-objectstore/templates/object-store.yaml
+apiVersion: aistor.min.io/v1
+kind: ObjectStore
+metadata:
+  name: minio
+  namespace: "mlops"
+  ## Optionally pass labels to be applied to the statefulset pods
+  labels:
+    app: minio
+spec:
+  ## Secret with default environment variable configurations
+  configuration:
+    name: minio-env-configuration
+  pools:
+    - servers: 1
+      
+      name: pool
+      volumesPerServer: 4
+      volumeClaimTemplate:
+        metadata:
+          name: "data"
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+  mountPath: "/export"
+  subPath: "/data"
+  certificates:
+    disableAutoCert: true
+  podManagementPolicy: Parallel
+  services:
+    console:
+      nodePort: 30030
+      serviceType: NodePort
+    minio:
+      nodePort: 30031
+      serviceType: NodePort
+  prometheusOperator: false

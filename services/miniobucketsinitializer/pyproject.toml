@@ -1,0 +1,11 @@
+[project]
+name = "miniobucketsinitializer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "minio>=7.2.20",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.12.0",
+]

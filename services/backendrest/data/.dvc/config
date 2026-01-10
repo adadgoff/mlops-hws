@@ -1,0 +1,11 @@
+[core]
+    analytics = false
+    no_scm = True
+    remote = minio
+
+['remote "minio"']
+    credentialpath = credentials
+    endpointurl = http://minio:9000
+    ssl_verify = false
+    url = s3://datasets
+    use_ssl = false

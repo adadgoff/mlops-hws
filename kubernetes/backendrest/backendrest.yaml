@@ -1,0 +1,122 @@
+---
+# backendrest-service-account.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backendrest
+  namespace: mlops
+---
+# backendrest-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backendrest-config
+  namespace: mlops
+data:
+  CLEARML_APISERVER: "http://clearml-apiserver:8008"
+  CLEARML_WEBSERVER: "http://clearml-webserver:8080"
+  CLEARML_FILESERVER: "http://clearml-fileserver:8081"
+  MINIO_CONSOLE: "minio:9000"
+---
+# backendrest-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backendrest-secret
+  namespace: mlops
+type: Opaque
+stringData:
+  CLEARML_USERNAME: "clearml"
+  CLEARML_PASSWORD: "clearml123"
+  MINIO_ACCESS_KEY: "minio"
+  MINIO_SECRET_KEY: "minio123"
+---
+# backendrest-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backendrest
+  namespace: mlops
+  labels:
+    app.kubernetes.io/name: backendrest
+    app.kubernetes.io/instance: backendrest
+    app.kubernetes.io/version: "1.0"
+spec:
+  type: NodePort
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30010
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: backendrest
+    app.kubernetes.io/instance: backendrest
+---
+# backendrest-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backendrest
+  namespace: mlops
+  labels:
+    app.kubernetes.io/name: backendrest
+    app.kubernetes.io/instance: backendrest
+    app.kubernetes.io/version: "1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backendrest
+      app.kubernetes.io/instance: backendrest
+  template:
+    metadata:
+      labels:  
+        app.kubernetes.io/name: backendrest
+        app.kubernetes.io/instance: backendrest
+    spec:
+      serviceAccountName: backendrest
+      securityContext: {}
+      containers:
+        - name: backendrest
+          image: "backendrest:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: backendrest-config
+            - secretRef:
+                name: backendrest-secret
+          args:
+            - uv
+            - run
+            - fastapi
+            - run
+            - main.py
+            # - --port=8000
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+            httpGet:
+              path: /ping
+              port: 8000
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+            httpGet:
+              path: /ping
+              port: 8000
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext: {}
