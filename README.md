@@ -1,8 +1,8 @@
 # MLOps HW3
 
-> MLOps система (домашнее задание), Иванов Иван.
+> MLOps система (домашнее задание), Дадыков Артемий.
 >
-> По всем вопросам: https://t.me/ivanov_ivan.
+> По всем вопросам: https://t.me/artemydadykov.
 
 [Отчет нагрузочного тестирования](/docs/load_testing_report.md).
 
