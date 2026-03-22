@@ -1,0 +1,37 @@
+test_scenarios:
+  smoke_test:
+    users: 10
+    spawn_rate: 2
+    run_time: 2m
+    description: "Быстрая проверка работоспособности"
+  
+  normal_load:
+    users: 50
+    spawn_rate: 5
+    run_time: 10m
+    description: "Нормальная нагрузка (ожидаемая в продакшене)"
+  
+  stress_test:
+    users: 200
+    spawn_rate: 20
+    run_time: 15m
+    description: "Стресс-тест для определения пределов"
+  
+  endurance_test:
+    users: 100
+    spawn_rate: 10
+    run_time: 1h
+    description: "Тест на выносливость (поиск утечек памяти)"
+
+endpoints:
+  - path: /ping
+    expected_rps: 100
+    max_latency_p95: 100ms
+  
+  - path: /api/v1/inference/*
+    expected_rps: 50
+    max_latency_p95: 500ms
+  
+  - path: /api/v1/datasets/*
+    expected_rps: 30
+    max_latency_p95: 200ms

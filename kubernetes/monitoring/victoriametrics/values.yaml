@@ -1,0 +1,22 @@
+server:
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+  persistence:
+    enabled: true
+    size: 10Gi
+  service:
+    type: ClusterIP
+    port: 8428
+
+serverExtraArgs:
+  retentionPeriod: "1"
+  search.maxQueryLen: "1MB"
+
+ingress:
+  enabled: false

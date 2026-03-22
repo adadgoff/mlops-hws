@@ -1,11 +1,18 @@
-# MLOps HW1
+# MLOps HW3
 
-> MLOps система (домашнее задание), Дадыков Артемий.
+> MLOps система (домашнее задание), Иванов Иван.
 >
-> По всем вопросам: https://t.me/artemydadykov.
+> По всем вопросам: https://t.me/ivanov_ivan.
+
+[Отчет нагрузочного тестирования](/docs/load_testing_report.md).
+
+---
+
+# MLOps HW1
 
 ## Содержание
 
+- [MLOps HW3](#mlops-hw3)
 - [MLOps HW1](#mlops-hw1)
   - [Содержание](#содержание)
   - [Заметки](#заметки)

@@ -20,9 +20,9 @@ help: contacts
 
 contacts:
 	@echo "/-----------------------------\\"
-	@echo "| MLOps HW1 © Дадыков Артемий |"
+	@echo "| MLOps HW1 © Иванов Иван     |"
 	@echo "| Контакты:                   |"
-	@echo "| tg: @artemydadykov          |"
+	@echo "| tg: @ivanov_ivan            |"
 	@echo "\\-----------------------------/"
 
 check-deps:
