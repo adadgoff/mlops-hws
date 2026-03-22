@@ -33,6 +33,7 @@
         "pycache",
         "Pydantic",
         "pyproject",
+        "Qwen",
         "REDOC",
         "selectbox",
         "statefulset",
