@@ -35,7 +35,7 @@
   - [PLAN.md](/PLAN.md).
   - [CHANGELOG.md](/CHANGELOG.md).
   - [API.md](/API.md).
-- Видео с демонстрацией чатов: [](/videos/).
+- Видео с демонстрацией чатов: [\*тык\*](/videos/demo.mp4).
 
 ---
 
