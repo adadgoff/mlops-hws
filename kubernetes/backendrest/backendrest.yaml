@@ -11,11 +11,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: backendrest
+      app: backendrest
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: backendrest
+        app: backendrest
     spec:
       containers:
         - name: backendrest
@@ -52,7 +52,7 @@ metadata:
   name: backendrest
   namespace: mlops
   labels:
-    app.kubernetes.io/name: backendrest
+    app: backendrest
 spec:
   type: ClusterIP
   ports:
@@ -60,4 +60,4 @@ spec:
       targetPort: 8000
       name: http
   selector:
-    app.kubernetes.io/name: backendrest
+    app: backendrest

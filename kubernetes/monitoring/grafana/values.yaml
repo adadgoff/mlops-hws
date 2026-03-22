@@ -20,6 +20,7 @@ datasources:
         access: proxy
         isDefault: true
         editable: true
+        uid: victoriametrics
 
 dashboardProviders:
   dashboardproviders.yaml:
@@ -32,8 +33,10 @@ dashboardProviders:
         disableDeletion: false
         updatePeriodSeconds: 30
         options:
-          path: /var/lib/grafana/dashboards
+          path: /var/lib/grafana/dashboards/default
 
-dashboardsConfigMaps:
-  - name: ml-dashboard
-    key: dashboard.json
+dashboards:
+  default:
+    ml-backend-dashboard:
+      url: https://raw.githubusercontent.com/mlops-hw1/main/kubernetes/monitoring/grafana/dashboards/ml-service-dashboard.json
+      datasource: VictoriaMetrics

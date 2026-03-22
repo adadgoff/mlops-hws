@@ -5,18 +5,30 @@
 	check-ip    \
  	check-ports \
 	run         \
+	run-monitoring \
 	clear       \
+	clear-monitoring \
 	status      \
-	urls
+	urls        \
+	load-test-smoke \
+	load-test-normal \
+	load-test-stress
 
 help: contacts
 	@echo "Доступные команды:"
 	@echo "  make help   - показать эту справку;"
 	@echo "  make run    - запустить MLOps систему;"
+	@echo "  make run-monitoring - запустить мониторинг (VictoriaMetrics + Grafana);"
 	@echo "  make status - посмотреть статус MLOps системы и minikube'а;"
 	@echo "  make clear  - остановить MLOps систему и удалить использованные ресурсы."
 	@echo "                Будьте осторожны, так как отработает команда minikube delete;"
+	@echo "  make clear-monitoring - остановить и удалить мониторинг;"
 	@echo "  make urls   - получить адреса сервисов в minikube."
+	@echo ""
+	@echo "Команды нагрузочного тестирования:"
+	@echo "  make load-test-smoke    - Smoke тест (10 пользователей, 2 мин);"
+	@echo "  make load-test-normal   - Normal Load тест (50 пользователей, 10 мин);"
+	@echo "  make load-test-stress   - Stress тест (200 пользователей, 15 мин)."
 
 contacts:
 	@echo "/-----------------------------\\"
@@ -212,6 +224,61 @@ run: contacts check-deps check-ip
 
 	@minikube service frontend --namespace=mlops > /dev/null 2>&1
 
+run-monitoring:
+	@echo "Запуск мониторинга (VictoriaMetrics + Grafana)..."
+	
+	@echo "Этап 1. Создание namespace monitoring..."
+	@kubectl apply -f kubernetes/monitoring/monitoring.yaml || { \
+		echo "ERROR: kubernetes/monitoring/monitoring.yaml не смог примениться."; \
+		exit 1; \
+	}
+	
+	@echo "Этап 2. Применение ServiceMonitor..."
+	@kubectl apply -f kubernetes/monitoring/servicemonitor.yaml || { \
+		echo "ERROR: kubernetes/monitoring/servicemonitor.yaml не смог примениться."; \
+		exit 1; \
+	}
+	
+	@echo "Этап 3. Ожидание готовности VictoriaMetrics..."
+	@kubectl wait deployment/victoriametrics \
+				  --for=condition=available \
+				  --namespace=monitoring    \
+				  --timeout=120s || {       \
+		echo "WARNING: VictoriaMetrics не удалось запустить (timeout ожидания)."; \
+	}
+	
+	@echo "Этап 4. Ожидание готовности Grafana..."
+	@kubectl wait deployment/grafana  \
+				  --for=condition=available \
+				  --namespace=monitoring    \
+				  --timeout=120s || {       \
+		echo "WARNING: Grafana не удалось запустить (timeout ожидания)."; \
+	}
+	
+	@echo "Мониторинг успешно запущен."
+	@echo ""
+	@echo "Доступные адреса мониторинга:"
+	@echo "  http://192.168.200.200:30040 - Grafana (admin/admin123)"
+	@echo "  http://192.168.200.200:30041 - VictoriaMetrics"
+
+clear-monitoring:
+	@echo "Остановка мониторинга..."
+	@kubectl delete -f kubernetes/monitoring/monitoring.yaml --ignore-not-found=true
+	@kubectl delete -f kubernetes/monitoring/servicemonitor.yaml --ignore-not-found=true
+	@echo "Мониторинг остановлен."
+
+load-test-smoke:
+	@echo "Запуск Smoke теста..."
+	@cd tests/load && locust -f locustfile.py --headless -u 10 -r 2 -t 2m --host $$(minikube service backendrest --namespace=mlops --url | head -n 1)
+
+load-test-normal:
+	@echo "Запуск Normal Load теста..."
+	@cd tests/load && locust -f locustfile.py --headless -u 50 -r 5 -t 10m --host $$(minikube service backendrest --namespace=mlops --url | head -n 1)
+
+load-test-stress:
+	@echo "Запуск Stress теста..."
+	@cd tests/load && locust -f locustfile.py --headless -u 200 -r 20 -t 15m --host $$(minikube service backendrest --namespace=mlops --url | head -n 1)
+
 status:
 	@echo "Статус minikube'а:"
 	@minikube status
@@ -245,4 +312,8 @@ urls:
 	@echo "http://192.168.200.200:30030      - Minio Console (Frontend)"
 	@echo "                                    Логин: \"minio\""
 	@echo "                                    Пароль: \"minio123\";"
-	@echo "http://192.168.200.200:30031      - Minio API."
+	@echo "http://192.168.200.200:30031      - Minio API;"
+	@echo "http://192.168.200.200:30040      - Grafana (Monitoring)"
+	@echo "                                    Логин: \"admin\""
+	@echo "                                    Пароль: \"admin123\";"
+	@echo "http://192.168.200.200:30041      - VictoriaMetrics (Metrics Storage)."

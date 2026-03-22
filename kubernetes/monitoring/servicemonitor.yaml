@@ -4,11 +4,14 @@ metadata:
   name: ml-backend-monitor
   namespace: mlops
   labels:
-    release: prometheus
+    app: victoriametrics
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: backendrest
+      app: backendrest
+  namespaceSelector:
+    matchNames:
+      - mlops
   endpoints:
     - port: http
       path: /metrics
